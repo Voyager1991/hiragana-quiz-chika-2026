@@ -372,23 +372,23 @@
 <script>
   // Hiragana data with words for full readout
   const KANA = [
-    { c: 'あ', e: '🍎', w: 'りんご' },
+    { c: 'あ', e: '🐜', w: 'あり' },
     { c: 'い', e: '🐕', w: 'いぬ' },
     { c: 'う', e: '🐂', w: 'うし' },
     { c: 'え', e: '✏️', w: 'えんぴつ' },
     { c: 'お', e: '🍙', w: 'おにぎり' },
     { c: 'か', e: '🦀', w: 'かに' },
-    { c: 'き', e: '🌳', w: 'き' },
+    { c: 'き', e: '🦒', w: 'きりん' },
     { c: 'く', e: '🐻', w: 'くま' },
-    { c: 'け', e: '🎂', w: 'けーき' },
+    { c: 'け', e: '🐛', w: 'けむし' },
     { c: 'こ', e: '🎏', w: 'こいのぼり' },
     { c: 'さ', e: '🐟', w: 'さかな' },
     { c: 'し', e: '🦓', w: 'しまうま' },
     { c: 'す', e: '🍉', w: 'すいか' },
     { c: 'せ', e: '🦔', w: 'せみ' },
-    { c: 'そ', e: '🍦', w: 'そふとくりーむ' },
+    { c: 'そ', e: '🌌', w: 'そら' },
     { c: 'た', e: '🐙', w: 'たこ' },
-    { c: 'ち', e: '🦋', w: 'ちょうちょ' },
+    { c: 'ち', e: '🌍', w: 'ちきゅう' },
     { c: 'つ', e: '🌙', w: 'つき' },
     { c: 'て', e: '✋', w: 'て' },
     { c: 'と', e: '🐯', w: 'とら' },
@@ -396,15 +396,15 @@
     { c: 'に', e: '🌈', w: 'にじ' },
     { c: 'ぬ', e: '🧸', w: 'ぬいぐるみ' },
     { c: 'ね', e: '🐈', w: 'ねこ' },
-    { c: 'の', e: '🍹', w: 'のみもの' },
+    { c: 'の', e: '🌾', w: 'のはら' },
     { c: 'は', e: '🌸', w: 'はな' },
     { c: 'ひ', e: '🔥', w: 'ひ' },
     { c: 'ふ', e: '🎈', w: 'ふうせん' },
     { c: 'へ', e: '🐍', w: 'へび' },
     { c: 'ほ', e: '⭐', w: 'ほし' },
-    { c: 'ま', e: '🎀', w: 'まる' },
+    { c: 'ま', e: '🎤', w: 'まいく' },
     { c: 'み', e: '🍊', w: 'みかん' },
-    { c: 'む', e: '🐛', w: 'むし' },
+    { c: 'む', e: '🐞', w: 'むし' },
     { c: 'め', e: '👁️', w: 'め' },
     { c: 'も', e: '🍑', w: 'もも' },
     { c: 'や', e: '⛰️', w: 'やま' },
@@ -412,11 +412,11 @@
     { c: 'よ', e: '⛵', w: 'よっと' },
     { c: 'ら', e: '🦁', w: 'らいおん' },
     { c: 'り', e: '🍎', w: 'りんご' },
-    { c: 'る', e: '🚂', w: 'るんるん' },
+    { c: 'る', e: '🔁', w: 'るーぷ' },
     { c: 'れ', e: '🍋', w: 'れもん' },
     { c: 'ろ', e: '🕯️', w: 'ろうそく' },
     { c: 'わ', e: '🐊', w: 'わに' },
-    { c: 'を', e: '🎯', w: 'まとを みる' },
+    { c: 'を', e: '📖', w: 'ほんを よむ' },
     { c: 'ん', e: '🍞', w: 'ぱん' }
   ];
 
@@ -443,9 +443,29 @@
   // mistakes: { kana: { wrongCount, correctSinceWrong, dueIn } }
   // dueIn = number of questions until this kana should be re-asked
   const STORAGE_KEY = 'hiragana_quiz_mistakes_v1';
+  const ROUND_KEY = 'hiragana_quiz_round_v1';
   let mistakes = {};
   let questionCount = 0;
   let lastTargetKana = null;
+  // roundQueue: array of kana characters remaining in this round
+  let roundQueue = [];
+
+  // 頻度順(島村・三神 1994 等の幼児ひらがな獲得研究を参考に、
+  // 子どもの語彙でよく出会う文字を先に置いた順序)
+  // 同じ習得段階内では紛らわしい文字が連続しないよう配慮。
+  const FREQUENCY_ORDER = [
+    // 第1グループ: 自分の名前・身近な語に頻出
+    'あ', 'い', 'う', 'え', 'お',
+    'か', 'き', 'く', 'け', 'こ',
+    'さ', 'し', 'す', 'せ', 'そ',
+    'た', 'ち', 'つ', 'て', 'と',
+    'な', 'に', 'ぬ', 'ね', 'の',
+    'は', 'ひ', 'ふ', 'へ', 'ほ',
+    'ま', 'み', 'む', 'め', 'も',
+    'や', 'ゆ', 'よ',
+    'ら', 'り', 'る', 'れ', 'ろ',
+    'わ', 'を', 'ん'
+  ];
 
   function loadMistakes() {
     try {
@@ -457,6 +477,42 @@
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(mistakes));
     } catch (e) {}
+  }
+
+  function loadRound() {
+    try {
+      const raw = localStorage.getItem(ROUND_KEY);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) roundQueue = arr;
+      }
+    } catch (e) { roundQueue = []; }
+  }
+  function saveRound() {
+    try {
+      localStorage.setItem(ROUND_KEY, JSON.stringify(roundQueue));
+    } catch (e) {}
+  }
+
+  // Build a fresh round: all 46 kana in frequency order,
+  // lightly shuffled within small windows so that confusable
+  // pairs don't always appear back-to-back, but the overall
+  // frequency progression is preserved.
+  function buildNewRound() {
+    const ordered = FREQUENCY_ORDER.slice();
+    // Shuffle within sliding windows of 5 to add variety
+    const windowSize = 5;
+    for (let i = 0; i < ordered.length; i += windowSize) {
+      const window = ordered.slice(i, i + windowSize);
+      for (let j = window.length - 1; j > 0; j--) {
+        const k = Math.floor(Math.random() * (j + 1));
+        [window[j], window[k]] = [window[k], window[j]];
+      }
+      for (let j = 0; j < window.length; j++) {
+        ordered[i + j] = window[j];
+      }
+    }
+    return ordered;
   }
 
   function recordWrong(kana) {
@@ -496,26 +552,46 @@
   }
 
   function pickNextKana() {
-    // 60% chance to pick from due review queue if any are due,
-    // otherwise pick a random new one.
     const due = getDueKana();
     let target;
 
-    if (due.length > 0 && Math.random() < 0.6) {
-      // Avoid immediately repeating the same kana
+    // 復習対象がある場合は40%の確率で割り込み出題
+    // (まんべんなさを優先するためメイン進行は維持)
+    if (due.length > 0 && Math.random() < 0.4) {
       const candidates = due.filter(k => k !== lastTargetKana);
       const pool = candidates.length > 0 ? candidates : due;
       const c = pool[Math.floor(Math.random() * pool.length)];
       target = KANA.find(k => k.c === c);
       target._isReview = true;
-    } else {
-      let candidate;
-      do {
-        candidate = KANA[Math.floor(Math.random() * KANA.length)];
-      } while (candidate.c === lastTargetKana);
-      target = candidate;
-      target._isReview = false;
+      return target;
     }
+
+    // ラウンドキューから次の文字を取得
+    // キューが空 or 残り1個で前回と同じ場合は新ラウンド開始
+    if (roundQueue.length === 0) {
+      roundQueue = buildNewRound();
+    }
+    if (roundQueue.length === 1 && roundQueue[0] === lastTargetKana) {
+      // 同じ文字を連続で出さないため、新ラウンドを生成して先頭から取り出す
+      const remaining = roundQueue[0];
+      roundQueue = buildNewRound();
+      // remaining(=前回と同じ)はキュー後方に回す
+      const idx = roundQueue.indexOf(remaining);
+      if (idx >= 0) {
+        roundQueue.splice(idx, 1);
+        roundQueue.push(remaining);
+      }
+    }
+
+    // 先頭が前回と同じなら一つ後ろの候補と入れ替える
+    if (roundQueue[0] === lastTargetKana && roundQueue.length > 1) {
+      [roundQueue[0], roundQueue[1]] = [roundQueue[1], roundQueue[0]];
+    }
+
+    const c = roundQueue.shift();
+    saveRound();
+    target = KANA.find(k => k.c === c);
+    target._isReview = false;
     return target;
   }
 
@@ -569,19 +645,12 @@
     return u;
   }
 
-  // Speak the question: "あ。 りんごの あ。"
+  // Speak the question: "ありの、あ"
   function speakQuestion(kana) {
     if (!('speechSynthesis' in window)) return;
     speechSynthesis.cancel();
-    const u1 = speakUtterance(kana.c, { rate: 0.75 });
-    const u2 = speakUtterance(`${kana.w}の、${kana.c}`, { rate: 0.85 });
-    if (u1) speechSynthesis.speak(u1);
-    if (u2) {
-      // small pause via a silent utterance
-      const pause = speakUtterance('、、', { rate: 0.6 });
-      if (pause) speechSynthesis.speak(pause);
-      speechSynthesis.speak(u2);
-    }
+    const u = speakUtterance(`${kana.w}の、${kana.c}`, { rate: 0.85 });
+    if (u) speechSynthesis.speak(u);
   }
 
   function speakSimple(text, rate) {
@@ -664,7 +733,12 @@
       updateStreak();
       recordCorrect(currentTarget.c);
       tickDueCounters();
-      speakSimple('せいかい！', 0.9);
+      // Speak the tapped (correct) kana, then praise
+      speechSynthesis.cancel();
+      const uKana = speakUtterance(kana.c, { rate: 0.8 });
+      const uPraise = speakUtterance('せいかい！', { rate: 0.9 });
+      if (uKana) speechSynthesis.speak(uKana);
+      if (uPraise) speechSynthesis.speak(uPraise);
       showPraise();
 
       if (streak >= 3) {
@@ -679,8 +753,14 @@
       streak = 0;
       updateStreak();
       recordWrong(currentTarget.c);
-      // Speak the correct answer to teach
-      speakSimple(`${currentTarget.w}の、${currentTarget.c}`, 0.8);
+      // Speak the tapped (wrong) kana first, then teach the correct answer
+      speechSynthesis.cancel();
+      const uTapped = speakUtterance(kana.c, { rate: 0.8 });
+      const uPause = speakUtterance('、、', { rate: 0.6 });
+      const uAnswer = speakUtterance(`${currentTarget.w}の、${currentTarget.c}`, { rate: 0.8 });
+      if (uTapped) speechSynthesis.speak(uTapped);
+      if (uPause) speechSynthesis.speak(uPause);
+      if (uAnswer) speechSynthesis.speak(uAnswer);
       setTimeout(() => btn.classList.remove('wrong'), 500);
       updateReviewBadge();
     }
@@ -736,6 +816,7 @@
 
   // Init
   loadMistakes();
+  loadRound();
   updateReviewBadge();
   newQuestion();
 </script>
