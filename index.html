@@ -2,7 +2,12 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ひらがな">
+<meta name="theme-color" content="#fff8e7">
+<link rel="manifest" href="manifest.json">
 <title>ひらがな クイズ</title>
 <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Yusei+Magic&display=swap" rel="stylesheet">
 <style>
@@ -66,6 +71,10 @@
     display: flex;
     flex-direction: column;
     padding: 14px;
+    padding-top: max(14px, env(safe-area-inset-top));
+    padding-bottom: max(14px, env(safe-area-inset-bottom));
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
     max-width: 760px;
     margin: 0 auto;
   }
@@ -170,7 +179,7 @@
   .review-tag.show { display: block; }
 
   .hint-emoji {
-    font-size: 84px;
+    font-size: clamp(64px, 11vmin, 120px);
     line-height: 1;
     display: inline-block;
     animation: bounce 1.5s ease-in-out infinite;
@@ -208,6 +217,7 @@
     gap: 10px;
     flex: 1;
     align-content: center;
+    min-height: 0;
   }
 
   .choice {
@@ -215,11 +225,11 @@
     border: 5px solid var(--ink);
     border-radius: 24px;
     font-family: 'Mochiy Pop One', sans-serif;
-    font-size: 64px;
+    font-size: clamp(40px, 9vmin, 84px);
     cursor: pointer;
     box-shadow: var(--shadow);
     transition: transform 0.1s, background 0.2s;
-    aspect-ratio: 1;
+    min-height: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -319,16 +329,54 @@
   }
   .streak-dot.on { background: var(--coral); }
 
-  @media (max-height: 740px) {
-    .choice { font-size: 52px; }
-    .hint-emoji { font-size: 64px; }
-    .question-card { padding: 12px; }
+  /* 横向き(landscape): 質問カードと選択肢を横並びにして縦の圧迫を防ぐ */
+  @media (orientation: landscape) and (max-height: 600px) {
+    .app {
+      flex-direction: row;
+      max-width: 100%;
+      gap: 12px;
+      align-items: stretch;
+    }
+    .top {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 10;
+    }
+    .question-card {
+      flex: 0 0 38%;
+      margin-bottom: 0;
+      margin-top: 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .choices {
+      margin-top: 70px;
+    }
   }
+
+  /* 大画面(iPad横向きなど) */
+  @media (min-width: 768px) {
+    .app { padding: 24px; max-width: 900px; }
+    .question-card { padding: 24px; border-radius: 36px; }
+    .choices { gap: 16px; }
+    .choice { border-radius: 28px; }
+  }
+
+  /* 小さい画面 */
   @media (max-width: 380px) {
-    .choice { font-size: 44px; border-radius: 18px; border-width: 4px; }
+    .choice { border-radius: 18px; border-width: 4px; }
     .score { font-size: 16px; padding: 6px 12px; }
     .star-icon { font-size: 18px; }
     .streak-dot { width: 10px; height: 10px; }
+  }
+
+  /* 低い画面(横向きスマホなど) */
+  @media (max-height: 500px) {
+    .question-card { padding: 8px; }
+    .speaker-btn { font-size: 14px; padding: 6px 14px; }
   }
 </style>
 </head>
@@ -819,6 +867,15 @@
   loadRound();
   updateReviewBadge();
   newQuestion();
+
+  // Service Worker 登録 (オフライン対応)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => {
+        // 登録失敗してもアプリは動作するので無視
+      });
+    });
+  }
 </script>
 
 </body>
