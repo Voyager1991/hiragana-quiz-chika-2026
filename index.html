@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="くく">
+<meta name="apple-mobile-web-app-title" content="ひらがな">
 <meta name="theme-color" content="#fff8e7">
 <link rel="manifest" href="manifest.json">
-<title>くく クイズ</title>
+<title>ひらがな クイズ</title>
 <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Yusei+Magic&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -113,13 +113,7 @@
   }
   .review-badge.show { display: inline-block; }
 
-  .top-buttons {
-    display: flex;
-    gap: 8px;
-    flex-shrink: 0;
-  }
-
-  .icon-btn {
+  .restart {
     background: white;
     border: 4px solid var(--ink);
     border-radius: 999px;
@@ -130,11 +124,8 @@
     box-shadow: var(--shadow);
     transition: transform 0.1s;
     flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
-  .icon-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 rgba(61,43,86,0.15); }
+  .restart:active { transform: translateY(3px); box-shadow: 0 3px 0 rgba(61,43,86,0.15); }
 
   .question-card {
     background: white;
@@ -187,50 +178,13 @@
   }
   .review-tag.show { display: block; }
 
-  .dan-tag {
-    position: absolute;
-    top: 10px;
-    right: 16px;
-    background: var(--peach);
-    border: 3px solid var(--ink);
-    color: var(--ink);
-    border-radius: 999px;
-    padding: 2px 12px;
-    font-family: 'Mochiy Pop One', sans-serif;
-    font-size: 14px;
-    z-index: 2;
-  }
-
-  .equation {
-    font-family: 'Mochiy Pop One', sans-serif;
-    font-size: clamp(48px, 11vmin, 96px);
-    line-height: 1.1;
-    margin: 12px 0 4px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: clamp(8px, 2vmin, 18px);
-    flex-wrap: nowrap;
-  }
-
-  .num {
-    display: inline-block;
-    animation: numPop 0.4s ease;
-  }
-  .op, .equals {
-    color: var(--coral);
-    display: inline-block;
-  }
-  .qmark {
-    color: var(--grape);
+  .hint-emoji {
+    font-size: clamp(64px, 11vmin, 120px);
+    line-height: 1;
     display: inline-block;
     animation: bounce 1.5s ease-in-out infinite;
-  }
-
-  @keyframes numPop {
-    0% { transform: scale(0.5); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
+    position: relative;
+    margin: 8px 0;
   }
 
   @keyframes bounce {
@@ -271,7 +225,7 @@
     border: 5px solid var(--ink);
     border-radius: 24px;
     font-family: 'Mochiy Pop One', sans-serif;
-    font-size: clamp(36px, 8vmin, 72px);
+    font-size: clamp(40px, 9vmin, 84px);
     cursor: pointer;
     box-shadow: var(--shadow);
     transition: transform 0.1s, background 0.2s;
@@ -375,441 +329,6 @@
   }
   .streak-dot.on { background: var(--coral); }
 
-  /* 設定モーダル */
-  .modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(61, 43, 86, 0.5);
-    z-index: 200;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  .modal-backdrop.show { display: flex; }
-
-  .modal {
-    background: var(--cream);
-    border: 5px solid var(--ink);
-    border-radius: 28px;
-    padding: 24px 20px;
-    box-shadow: var(--shadow);
-    max-width: 480px;
-    width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-
-  .modal h2 {
-    font-family: 'Mochiy Pop One', sans-serif;
-    font-size: 24px;
-    text-align: center;
-    margin-bottom: 6px;
-  }
-  .modal .modal-sub {
-    text-align: center;
-    font-size: 14px;
-    color: rgba(61,43,86,0.7);
-    margin-bottom: 18px;
-  }
-
-  .dan-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-
-  .dan-btn {
-    background: white;
-    border: 4px solid var(--ink);
-    border-radius: 18px;
-    font-family: 'Mochiy Pop One', sans-serif;
-    font-size: 22px;
-    padding: 14px 0;
-    cursor: pointer;
-    box-shadow: var(--shadow);
-    transition: transform 0.1s;
-    color: var(--ink);
-  }
-  .dan-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 rgba(61,43,86,0.15); }
-  .dan-btn.active {
-    background: var(--coral);
-    color: white;
-  }
-
-  .preset-row {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 18px;
-  }
-  .preset-btn {
-    background: var(--lavender);
-    border: 3px solid var(--ink);
-    border-radius: 999px;
-    padding: 6px 14px;
-    font-family: 'Yusei Magic', sans-serif;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 0 3px 0 rgba(61,43,86,0.15);
-    color: var(--ink);
-  }
-  .preset-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(61,43,86,0.15); }
-
-  .modal-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-  }
-  .modal-actions button {
-    flex: 1;
-    background: var(--mint);
-    border: 4px solid var(--ink);
-    border-radius: 999px;
-    padding: 12px;
-    font-family: 'Mochiy Pop One', sans-serif;
-    font-size: 18px;
-    cursor: pointer;
-    box-shadow: var(--shadow);
-    color: var(--ink);
-  }
-  .modal-actions button:active { transform: translateY(3px); box-shadow: 0 3px 0 rgba(61,43,86,0.15); }
-  /* モードタブ */
-  .mode-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-  .mode-tab {
-    flex: 1;
-    background: white;
-    border: 4px solid var(--ink);
-    border-radius: 999px;
-    font-family: 'Mochiy Pop One', sans-serif;
-    font-size: 16px;
-    padding: 8px 12px;
-    cursor: pointer;
-    box-shadow: var(--shadow);
-    color: var(--ink);
-    transition: transform 0.1s;
-  }
-  .mode-tab:active { transform: translateY(2px); }
-  .mode-tab.active {
-    background: var(--coral);
-    color: white;
-  }
-
-  /* ビュー(クイズ/暗記) */
-  .view {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-  .view-quiz {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-
-  /* 暗記モード: 段選択 */
-  .memo-pick-header {
-    text-align: center;
-    margin: 18px 0 16px;
-  }
-  .memo-pick-header h2 {
-    font-family: 'Mochiy Pop One', sans-serif;
-    font-size: clamp(20px, 5vmin, 28px);
-    color: var(--ink);
-  }
-  .memo-dan-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    align-content: center;
-    flex: 1;
-  }
-  .memo-dan-btn {
-    background: white;
-    border: 5px solid var(--ink);
-    border-radius: 24px;
-    font-family: 'Mochiy Pop One', sans-serif;
-    font-size: clamp(24px, 6vmin, 36px);
-    padding: 18px 0;
-    cursor: pointer;
-    box-shadow: var(--shadow);
-    color: var(--ink);
-    transition: transform 0.1s;
-  }
-  .memo-dan-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(61,43,86,0.15); }
-  .memo-dan-btn:nth-child(9n+1) { background: var(--peach); }
-  .memo-dan-btn:nth-child(9n+2) { background: var(--mint); }
-  .memo-dan-btn:nth-child(9n+3) { background: var(--sky); }
-  .memo-dan-btn:nth-child(9n+4) { background: var(--lemon); }
-  .memo-dan-btn:nth-child(9n+5) { background: var(--lavender); }
-  .memo-dan-btn:nth-child(9n+6) { background: var(--pink); }
-  .memo-dan-btn:nth-child(9n+7) { background: var(--peach); }
-  .memo-dan-btn:nth-child(9n+8) { background: var(--mint); }
-  .memo-dan-btn:nth-child(9n+9) { background: var(--sky); }
-
-  /* 暗記モード: カード */
-  .memo-card {
-    background: white;
-    border: 5px solid var(--ink);
-    border-radius: 32px;
-    padding: 28px 20px;
-    text-align: center;
-    box-shadow: var(--shadow);
-    position: relative;
-    overflow: hidden;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 0;
-    margin-bottom: 12px;
-    cursor: pointer;
-  }
-  .memo-card::before {
-    content: '';
-    position: absolute;
-    top: -40px; right: -40px;
-    width: 110px; height: 110px;
-    background: var(--lemon);
-    border-radius: 50%;
-    opacity: 0.6;
-  }
-  .memo-card::after {
-    content: '';
-    position: absolute;
-    bottom: -30px; left: -30px;
-    width: 80px; height: 80px;
-    background: var(--mint);
-    border-radius: 50%;
-    opacity: 0.5;
-  }
-  .memo-progress {
-    position: absolute;
-    top: 14px;
-    left: 18px;
-    background: var(--peach);
-    border: 3px solid var(--ink);
-    border-radius: 999px;
-    padding: 4px 14px;
-    font-family: 'Mochiy Pop One', sans-serif;
-    font-size: 16px;
-    z-index: 2;
-  }
-  .memo-equation {
-    font-family: 'Mochiy Pop One', sans-serif;
-    font-size: clamp(56px, 13vmin, 110px);
-    line-height: 1.1;
-    margin-bottom: 18px;
-    position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(10px, 2.5vmin, 22px);
-    flex-wrap: nowrap;
-  }
-  .memo-answer {
-    color: var(--coral);
-    display: inline-block;
-    animation: numPop 0.5s ease;
-  }
-  .memo-chant {
-    font-family: 'Mochiy Pop One', sans-serif;
-    font-size: clamp(24px, 5.5vmin, 40px);
-    color: var(--grape);
-    margin-bottom: 18px;
-    position: relative;
-    z-index: 1;
-    animation: numPop 0.5s ease 0.15s backwards;
-  }
-
-  .memo-actions {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 8px;
-  }
-  .memo-btn {
-    flex: 1;
-    background: var(--mint);
-    border: 4px solid var(--ink);
-    border-radius: 999px;
-    font-family: 'Mochiy Pop One', sans-serif;
-    font-size: 18px;
-    padding: 14px 0;
-    cursor: pointer;
-    box-shadow: var(--shadow);
-    color: var(--ink);
-    transition: transform 0.1s;
-  }
-  .memo-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 rgba(61,43,86,0.15); }
-  .memo-btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-  .memo-btn.memo-next {
-    background: var(--coral);
-    color: white;
-  }
-  .memo-quit {
-    background: transparent;
-    border: 3px dashed var(--ink);
-    border-radius: 999px;
-    padding: 8px 16px;
-    font-family: 'Yusei Magic', sans-serif;
-    font-size: 14px;
-    color: var(--ink);
-    cursor: pointer;
-    align-self: center;
-  }
-
-  /* 横向き対応 */
-  @media (orientation: landscape) and (max-height: 600px) {
-    .mode-tabs {
-      position: absolute;
-      top: 70px;
-      left: 14px;
-      right: 14px;
-      z-index: 10;
-    }
-    .view-memorize-pick, .view-memorize-card {
-      margin-top: 130px;
-    }
-    .memo-card { padding: 14px; }
-    .memo-equation { font-size: clamp(40px, 9vmin, 80px); margin-bottom: 10px; }
-    .memo-chant { font-size: clamp(20px, 4.5vmin, 32px); margin-bottom: 10px; }
-  }
-
-  .modal-actions .secondary {
-    background: white;
-  }
-
-  /* 進捗モーダル */
-  .progress-modal {
-    max-width: 560px;
-  }
-
-  .matrix-wrap {
-    overflow-x: auto;
-    margin-bottom: 14px;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .matrix {
-    border-collapse: separate;
-    border-spacing: 4px;
-    margin: 0 auto;
-    font-family: 'Mochiy Pop One', sans-serif;
-  }
-
-  .matrix th, .matrix td {
-    width: 40px;
-    height: 40px;
-    text-align: center;
-    vertical-align: middle;
-    border-radius: 8px;
-    font-size: 14px;
-    padding: 0;
-  }
-
-  .matrix th {
-    color: var(--ink);
-    background: transparent;
-    font-weight: normal;
-  }
-  .matrix th.corner {
-    color: var(--coral);
-    font-size: 16px;
-  }
-  .matrix th.row-header, .matrix th.col-header {
-    background: var(--cream);
-    border: 2px solid var(--ink);
-  }
-
-  .matrix td {
-    border: 2px solid var(--ink);
-    color: var(--ink);
-    font-size: 13px;
-    position: relative;
-  }
-  .matrix td.lv0 { background: #e8e8e8; color: #999; }
-  .matrix td.lv1 { background: #ffb3b3; }   /* 不正解あり: 赤 */
-  .matrix td.lv2 { background: #ffd699; }   /* 1回正解: オレンジ */
-  .matrix td.lv3 { background: #fff2a8; }   /* 2回正解: 黄 */
-  .matrix td.lv4 { background: #b8e6c1; }   /* 卒業: 緑 */
-
-  /* 進捗表示の凡例 */
-  .legend {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px 14px;
-    margin-bottom: 16px;
-    font-size: 13px;
-  }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .legend-item .sw {
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    border: 2px solid var(--ink);
-    border-radius: 5px;
-  }
-  .legend-item .sw.lv0 { background: #e8e8e8; }
-  .legend-item .sw.lv1 { background: #ffb3b3; }
-  .legend-item .sw.lv2 { background: #ffd699; }
-  .legend-item .sw.lv3 { background: #fff2a8; }
-  .legend-item .sw.lv4 { background: #b8e6c1; }
-
-  /* 進捗バー */
-  .progress-bar-wrap {
-    background: white;
-    border: 3px solid var(--ink);
-    border-radius: 999px;
-    height: 22px;
-    overflow: hidden;
-    margin-bottom: 12px;
-    position: relative;
-  }
-  .progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--mint), var(--coral));
-    transition: width 0.6s ease;
-    width: 0%;
-  }
-  .progress-bar-text {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Mochiy Pop One', sans-serif;
-    font-size: 13px;
-    color: var(--ink);
-  }
-
-  @media (max-width: 480px) {
-    .matrix th, .matrix td {
-      width: 34px;
-      height: 34px;
-      font-size: 12px;
-    }
-    .matrix th.corner { font-size: 14px; }
-    .matrix td { font-size: 11px; border-width: 1.5px; }
-    .legend { font-size: 12px; gap: 6px 10px; }
-  }
-
   /* 横向き(landscape): 質問カードと選択肢を横並びにして縦の圧迫を防ぐ */
   @media (orientation: landscape) and (max-height: 600px) {
     .app {
@@ -836,7 +355,6 @@
     .choices {
       margin-top: 70px;
     }
-    .equation { font-size: clamp(36px, 8vmin, 64px); }
   }
 
   /* 大画面(iPad横向きなど) */
@@ -853,13 +371,268 @@
     .score { font-size: 16px; padding: 6px 12px; }
     .star-icon { font-size: 18px; }
     .streak-dot { width: 10px; height: 10px; }
-    .icon-btn { width: 42px; height: 42px; font-size: 18px; border-width: 3px; }
   }
 
   /* 低い画面(横向きスマホなど) */
   @media (max-height: 500px) {
     .question-card { padding: 8px; }
     .speaker-btn { font-size: 14px; padding: 6px 14px; }
+  }
+
+  /* ===== 成長レポート画面 ===== */
+  .stats-btn {
+    background: white;
+    border: 4px solid var(--ink);
+    border-radius: 999px;
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform 0.1s;
+    flex-shrink: 0;
+  }
+  .stats-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 rgba(61,43,86,0.15); }
+
+  .stats-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--cream);
+    z-index: 200;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+    display: none;
+  }
+  .stats-screen.show { display: block; }
+
+  .stats-inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .stats-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    gap: 12px;
+  }
+
+  .stats-title {
+    font-family: 'Mochiy Pop One', sans-serif;
+    font-size: 24px;
+    color: var(--ink);
+  }
+
+  .stats-close {
+    background: white;
+    border: 4px solid var(--ink);
+    border-radius: 999px;
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    flex-shrink: 0;
+  }
+  .stats-close:active { transform: translateY(3px); box-shadow: 0 3px 0 rgba(61,43,86,0.15); }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .summary-card {
+    background: white;
+    border: 4px solid var(--ink);
+    border-radius: 20px;
+    padding: 14px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .summary-card.wide { grid-column: 1 / -1; }
+
+  .summary-label {
+    font-size: 14px;
+    color: var(--ink);
+    opacity: 0.7;
+    margin-bottom: 6px;
+  }
+
+  .summary-value {
+    font-family: 'Mochiy Pop One', sans-serif;
+    font-size: 28px;
+    color: var(--coral);
+  }
+
+  .progress-bar {
+    background: #f0e6d8;
+    border: 3px solid var(--ink);
+    border-radius: 999px;
+    height: 24px;
+    overflow: hidden;
+    margin-top: 8px;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--mint), var(--coral));
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Mochiy Pop One', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .section {
+    background: white;
+    border: 4px solid var(--ink);
+    border-radius: 20px;
+    padding: 14px;
+    box-shadow: var(--shadow);
+    margin-bottom: 14px;
+  }
+
+  .section-title {
+    font-family: 'Mochiy Pop One', sans-serif;
+    font-size: 18px;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+
+  .gojuon-table {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+  }
+
+  .kana-cell {
+    aspect-ratio: 1;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Mochiy Pop One', sans-serif;
+    font-size: clamp(14px, 3.5vmin, 22px);
+    color: var(--ink);
+    background: #f0f0f0;
+    position: relative;
+  }
+  /* 習熟度: 灰=未学習、黄=学習中、緑=習得 */
+  .kana-cell.unseen { background: #ececec; opacity: 0.5; }
+  .kana-cell.learning-low { background: #ffe5b8; }
+  .kana-cell.learning-mid { background: #fff2a8; }
+  .kana-cell.learning-high { background: #c8e8a8; }
+  .kana-cell.mastered { background: #7dd87d; color: white; border-color: var(--ink); }
+  .kana-cell.empty { background: transparent; border: none; }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 12px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .legend-swatch {
+    width: 16px; height: 16px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+  }
+
+  .weak-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .weak-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: #fff5f0;
+    border: 3px solid var(--ink);
+    border-radius: 14px;
+  }
+  .weak-kana {
+    font-family: 'Mochiy Pop One', sans-serif;
+    font-size: 32px;
+    color: var(--coral);
+    width: 48px;
+    text-align: center;
+  }
+  .weak-info {
+    flex: 1;
+    font-size: 14px;
+  }
+  .weak-rate {
+    font-family: 'Mochiy Pop One', sans-serif;
+    font-size: 18px;
+    color: var(--ink);
+  }
+
+  .daily-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 100px;
+    padding: 0 4px;
+  }
+  .daily-bar {
+    flex: 1;
+    background: var(--mint);
+    border: 2px solid var(--ink);
+    border-radius: 6px 6px 0 0;
+    min-height: 4px;
+    position: relative;
+    transition: height 0.4s ease;
+  }
+  .daily-bar.today { background: var(--coral); }
+  .daily-labels {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    font-size: 10px;
+    color: var(--ink);
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+  .daily-labels span { flex: 1; text-align: center; }
+
+  .empty-msg {
+    text-align: center;
+    padding: 20px;
+    color: var(--ink);
+    opacity: 0.6;
+    font-size: 14px;
+  }
+
+  .reset-stats {
+    display: block;
+    margin: 20px auto 0;
+    background: white;
+    border: 3px solid var(--ink);
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-family: 'Yusei Magic', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    opacity: 0.7;
+    cursor: pointer;
   }
 </style>
 </head>
@@ -880,495 +653,506 @@
       </div>
       <span class="review-badge" id="reviewBadge">📖 <span id="reviewCount">0</span></span>
     </div>
-    <div class="top-buttons">
-      <button class="icon-btn" id="progressBtn" aria-label="しんちょく">📊</button>
-      <button class="icon-btn" id="settingsBtn" aria-label="せってい">⚙️</button>
-      <button class="icon-btn" id="restartBtn" aria-label="さいしょから">🔄</button>
+    <div style="display: flex; gap: 8px;">
+      <button class="stats-btn" id="statsBtn" aria-label="きろくをみる">📊</button>
+      <button class="restart" id="restartBtn" aria-label="さいしょから">🔄</button>
     </div>
   </div>
 
-  <div class="mode-tabs">
-    <button class="mode-tab active" data-mode="quiz">🎯 クイズ</button>
-    <button class="mode-tab" data-mode="memorize">📚 あんき</button>
-  </div>
-
-  <!-- クイズビュー -->
-  <div class="view view-quiz" id="viewQuiz">
-    <div class="question-card" id="questionCard">
-      <div class="review-tag" id="reviewTag">📖 ふくしゅう</div>
-      <div class="dan-tag" id="danTag">2のだん</div>
-      <div class="equation" id="equation">
-        <span class="num" id="num1">2</span>
-        <span class="op">×</span>
-        <span class="num" id="num2">3</span>
-        <span class="equals">=</span>
-        <span class="qmark">?</span>
-      </div>
-      <div>
-        <button class="speaker-btn" id="speakBtn">
-          <span style="font-size: 22px;">🔊</span>
-          <span>もういちど きく</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="choices" id="choices"></div>
-  </div>
-
-  <!-- 暗記モード: 段選択ビュー -->
-  <div class="view view-memorize-pick" id="viewMemorizePick" style="display:none;">
-    <div class="memo-pick-header">
-      <h2>📚 あんきする だんを えらんでね</h2>
-    </div>
-    <div class="memo-dan-grid" id="memoDanGrid"></div>
-  </div>
-
-  <!-- 暗記モード: カードビュー -->
-  <div class="view view-memorize-card" id="viewMemorizeCard" style="display:none;">
-    <div class="memo-card" id="memoCard">
-      <div class="memo-progress" id="memoProgress">1 / 9</div>
-      <div class="memo-equation">
-        <span class="num" id="memoNum1">2</span>
-        <span class="op">×</span>
-        <span class="num" id="memoNum2">1</span>
-        <span class="equals">=</span>
-        <span class="memo-answer" id="memoAnswer">2</span>
-      </div>
-      <div class="memo-chant" id="memoChant">にいちが に</div>
-      <button class="speaker-btn" id="memoSpeakBtn">
+  <div class="question-card" id="questionCard">
+    <div class="review-tag" id="reviewTag">📖 ふくしゅう</div>
+    <div class="hint-emoji" id="hintEmoji">🍎</div>
+    <div>
+      <button class="speaker-btn" id="speakBtn">
         <span style="font-size: 22px;">🔊</span>
-        <span>もういちど</span>
+        <span>もういちど きく</span>
       </button>
     </div>
-    <div class="memo-actions">
-      <button class="memo-btn memo-back" id="memoBackBtn">← まえ</button>
-      <button class="memo-btn memo-next" id="memoNextBtn">つぎ →</button>
-    </div>
-    <button class="memo-quit" id="memoQuitBtn">だんを えらびなおす</button>
   </div>
-</div>
 
-<!-- 進捗モーダル -->
-<div class="modal-backdrop" id="progressModal">
-  <div class="modal progress-modal">
-    <h2>📊 みんなの しんちょく</h2>
-    <div class="modal-sub" id="progressSummary">れんしゅう ちゅう</div>
-
-    <div class="progress-bar-wrap">
-      <div class="progress-bar-fill" id="progressBarFill"></div>
-      <div class="progress-bar-text" id="progressBarText">0 / 81</div>
-    </div>
-
-    <div class="matrix-wrap">
-      <table class="matrix" id="matrix"></table>
-    </div>
-
-    <div class="legend">
-      <div class="legend-item"><span class="sw lv0"></span>まだ</div>
-      <div class="legend-item"><span class="sw lv1"></span>もうすこし</div>
-      <div class="legend-item"><span class="sw lv2"></span>1かい せいかい</div>
-      <div class="legend-item"><span class="sw lv3"></span>2かい せいかい</div>
-      <div class="legend-item"><span class="sw lv4"></span>そつぎょう</div>
-    </div>
-
-    <div class="modal-actions">
-      <button class="secondary" id="resetAllProgressBtn">ぜんぶ リセット</button>
-      <button id="closeProgressBtn">OK</button>
-    </div>
-  </div>
-</div>
-
-<!-- 設定モーダル -->
-<div class="modal-backdrop" id="settingsModal">
-  <div class="modal">
-    <h2>⚙️ せってい</h2>
-    <div class="modal-sub">れんしゅうする だんを えらんでね</div>
-
-    <div class="preset-row">
-      <button class="preset-btn" data-preset="easy">2と5</button>
-      <button class="preset-btn" data-preset="lower">2〜5</button>
-      <button class="preset-btn" data-preset="upper">6〜9</button>
-      <button class="preset-btn" data-preset="all">ぜんぶ</button>
-    </div>
-
-    <div class="dan-grid" id="danGrid">
-      <!-- JS で 1〜9 のだんボタンを生成 -->
-    </div>
-
-    <div class="modal-actions">
-      <button class="secondary" id="resetProgressBtn">にがてリセット</button>
-      <button id="closeSettingsBtn">OK</button>
-    </div>
-  </div>
+  <div class="choices" id="choices"></div>
 </div>
 
 <div class="praise" id="praise">すごい！</div>
 <div class="celebrate" id="celebrate"></div>
 
+<!-- 成長レポート画面 -->
+<div class="stats-screen" id="statsScreen">
+  <div class="stats-inner">
+    <div class="stats-header">
+      <div class="stats-title">📊 おべんきょうの きろく</div>
+      <button class="stats-close" id="statsCloseBtn" aria-label="とじる">✕</button>
+    </div>
+
+    <div class="summary-grid" id="summaryGrid"></div>
+
+    <div class="section">
+      <div class="section-title">🗾 50おん ひょう</div>
+      <div class="gojuon-table" id="gojuonTable"></div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-swatch" style="background:#ececec"></div>まだ</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#ffe5b8"></div>むずかしい</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#fff2a8"></div>もうすこし</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#c8e8a8"></div>じょうず</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#7dd87d"></div>たっせい！</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">🌱 にがてな もじ</div>
+      <div id="weakList"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">📅 さいきんの がんばり</div>
+      <div id="dailyChartArea"></div>
+    </div>
+
+    <button class="reset-stats" id="resetStatsBtn">きろくを ぜんぶ けす</button>
+  </div>
+</div>
+
 <script>
-  // ===== 九九データ =====
-  // 伝統的な唱え方(1〜9の段)
-  // 参考: 小学校2年で学習する伝統的な九九暗唱
-  const KUKU_CHANT = {
-    // 1の段
-    '1x1': 'いんいちが いち', '1x2': 'いんにが に', '1x3': 'いんさんが さん',
-    '1x4': 'いんしが し', '1x5': 'いんごが ご', '1x6': 'いんろくが ろく',
-    '1x7': 'いんしちが しち', '1x8': 'いんはちが はち', '1x9': 'いんくが く',
-    // 2の段
-    '2x1': 'にいちが に', '2x2': 'ににんが し', '2x3': 'にさんが ろく',
-    '2x4': 'にしが はち', '2x5': 'にごじゅう', '2x6': 'にろくじゅうに',
-    '2x7': 'にしちじゅうし', '2x8': 'にはちじゅうろく', '2x9': 'にくじゅうはち',
-    // 3の段
-    '3x1': 'さんいちが さん', '3x2': 'さんにが ろく', '3x3': 'さざんが く',
-    '3x4': 'さんしじゅうに', '3x5': 'さんごじゅうご', '3x6': 'さぶろくじゅうはち',
-    '3x7': 'さんしちにじゅういち', '3x8': 'さんぱにじゅうし', '3x9': 'さんくにじゅうしち',
-    // 4の段
-    '4x1': 'しいちが し', '4x2': 'しにが はち', '4x3': 'しさんじゅうに',
-    '4x4': 'ししじゅうろく', '4x5': 'しごにじゅう', '4x6': 'しろくにじゅうし',
-    '4x7': 'ししちにじゅうはち', '4x8': 'しはさんじゅうに', '4x9': 'しくさんじゅうろく',
-    // 5の段
-    '5x1': 'ごいちが ご', '5x2': 'ごにじゅう', '5x3': 'ごさんじゅうご',
-    '5x4': 'ごしにじゅう', '5x5': 'ごごにじゅうご', '5x6': 'ごろくさんじゅう',
-    '5x7': 'ごしちさんじゅうご', '5x8': 'ごはしじゅう', '5x9': 'ごっくしじゅうご',
-    // 6の段
-    '6x1': 'ろくいちが ろく', '6x2': 'ろくにじゅうに', '6x3': 'ろくさんじゅうはち',
-    '6x4': 'ろくしにじゅうし', '6x5': 'ろくごさんじゅう', '6x6': 'ろくろくさんじゅうろく',
-    '6x7': 'ろくしちしじゅうに', '6x8': 'ろくはしじゅうはち', '6x9': 'ろっくごじゅうし',
-    // 7の段
-    '7x1': 'しちいちが しち', '7x2': 'しちにじゅうし', '7x3': 'しちさんにじゅういち',
-    '7x4': 'しちしにじゅうはち', '7x5': 'しちごさんじゅうご', '7x6': 'しちろくしじゅうに',
-    '7x7': 'しちしちしじゅうく', '7x8': 'しちはごじゅうろく', '7x9': 'しちくろくじゅうさん',
-    // 8の段
-    '8x1': 'はちいちが はち', '8x2': 'はちにじゅうろく', '8x3': 'はちさんにじゅうし',
-    '8x4': 'はちしさんじゅうに', '8x5': 'はちごしじゅう', '8x6': 'はちろくしじゅうはち',
-    '8x7': 'はちしちごじゅうろく', '8x8': 'はっぱろくじゅうし', '8x9': 'はっくしちじゅうに',
-    // 9の段
-    '9x1': 'くいちが く', '9x2': 'くにじゅうはち', '9x3': 'くさんにじゅうしち',
-    '9x4': 'くしさんじゅうろく', '9x5': 'くごしじゅうご', '9x6': 'くろくごじゅうし',
-    '9x7': 'くしちろくじゅうさん', '9x8': 'くはしちじゅうに', '9x9': 'くくはちじゅういち'
-  };
+  // Hiragana data with words for full readout
+  const KANA = [
+    { c: 'あ', e: '🐜', w: 'あり' },
+    { c: 'い', e: '🐕', w: 'いぬ' },
+    { c: 'う', e: '🐂', w: 'うし' },
+    { c: 'え', e: '✏️', w: 'えんぴつ' },
+    { c: 'お', e: '🍙', w: 'おにぎり' },
+    { c: 'か', e: '🦀', w: 'かに' },
+    { c: 'き', e: '🦒', w: 'きりん' },
+    { c: 'く', e: '🐻', w: 'くま' },
+    { c: 'け', e: '🧶', w: 'けいと' },
+    { c: 'こ', e: '🎏', w: 'こいのぼり' },
+    { c: 'さ', e: '🐟', w: 'さかな' },
+    { c: 'し', e: '🦓', w: 'しまうま' },
+    { c: 'す', e: '🍉', w: 'すいか' },
+    { c: 'せ', e: '🛤️', w: 'せんろ' },
+    { c: 'そ', e: '☁️', w: 'そら' },
+    { c: 'た', e: '🐙', w: 'たこ' },
+    { c: 'ち', e: '🌍', w: 'ちきゅう' },
+    { c: 'つ', e: '🌙', w: 'つき' },
+    { c: 'て', e: '✋', w: 'て' },
+    { c: 'と', e: '🐯', w: 'とら' },
+    { c: 'な', e: '🍆', w: 'なす' },
+    { c: 'に', e: '🌈', w: 'にじ' },
+    { c: 'ぬ', e: '🧸', w: 'ぬいぐるみ' },
+    { c: 'ね', e: '🐈', w: 'ねこ' },
+    { c: 'の', e: '🌿', w: 'のはら' },
+    { c: 'は', e: '🌸', w: 'はな' },
+    { c: 'ひ', e: '🔥', w: 'ひ' },
+    { c: 'ふ', e: '🎈', w: 'ふうせん' },
+    { c: 'へ', e: '🐍', w: 'へび' },
+    { c: 'ほ', e: '⭐', w: 'ほし' },
+    { c: 'ま', e: '🎯', w: 'まと' },
+    { c: 'み', e: '🍊', w: 'みかん' },
+    { c: 'む', e: '🐞', w: 'むし' },
+    { c: 'め', e: '👁️', w: 'め' },
+    { c: 'も', e: '🍑', w: 'もも' },
+    { c: 'や', e: '⛰️', w: 'やま' },
+    { c: 'ゆ', e: '☃️', w: 'ゆきだるま' },
+    { c: 'よ', e: '⛵', w: 'よっと' },
+    { c: 'ら', e: '🦁', w: 'らいおん' },
+    { c: 'り', e: '🍎', w: 'りんご' },
+    { c: 'る', e: '💎', w: 'るびー' },
+    { c: 'れ', e: '🍋', w: 'れもん' },
+    { c: 'ろ', e: '🕯️', w: 'ろうそく' },
+    { c: 'わ', e: '🐊', w: 'わに' },
+    { c: 'を', e: '📖', w: 'ほんを よむ' },
+    { c: 'ん', e: '🍞', w: 'ぱん' }
+  ];
 
-  // 唱えから「答えを伏せた読み上げ用」を作る
-  // ルール:
-  //   1桁の答え(「が」あり) → 「が」まで読む    例: ににんがし → ににんが
-  //   2桁の答え(「が」なし) → a×b 部分だけ読む  例: にろくじゅうに → にろく
-  //                                              にごじゅう → に(2×5=10、a×b=「に」「ご」だが慣用に従い「にご」)
-  // 実装方針:
-  //   「が」を含むなら「が」までで切る。
-  //   「が」を含まないなら、辞書化した a×b 読みプレフィックスを使う。
-  const AB_PREFIX = {
-    1: 'いん', 2: 'に',  3: 'さん', 4: 'し',  5: 'ご',
-    6: 'ろく', 7: 'しち',8: 'はち', 9: 'く'
-  };
-  // 例外的に縮約される a×b 読み(伝統的な唱えに合わせる)
-  // key: "a x b", value: 読み (a×b 部分のみ)
-  const AB_PREFIX_OVERRIDE = {
-    '3x3': 'さざん',   // さざんがく
-    '3x6': 'さぶろく', // さぶろくじゅうはち
-    '3x8': 'さんぱ',   // さんぱにじゅうし
-    '5x8': 'ごは',     // ごはしじゅう
-    '5x9': 'ごっく',   // ごっくしじゅうご
-    '6x8': 'ろくは',   // ろくはしじゅうはち
-    '6x9': 'ろっく',   // ろっくごじゅうし
-    '8x1': 'はち',
-    '8x8': 'はっぱ',   // はっぱろくじゅうし
-    '8x9': 'はっく'    // はっくしちじゅうに
-  };
+  const CONFUSION_GROUPS = [
+    ['さ', 'ち', 'き'],
+    ['ぬ', 'め', 'の', 'あ'],
+    ['は', 'ほ', 'ま'],
+    ['ね', 'れ', 'わ'],
+    ['る', 'ろ'],
+    ['い', 'り'],
+    ['こ', 'に'],
+    ['し', 'つ'],
+    ['た', 'な'],
+    ['ら', 'う', 'ろ'],
+    ['ふ', 'う'],
+    ['そ', 'ろ'],
+    ['ん', 'く'],
+    ['け', 'は'],
+    ['て', 'と'],
+    ['ま', 'も']
+  ];
 
-  function buildPrompt(a, b) {
-    const key = `${a}x${b}`;
-    const chant = KUKU_CHANT[key];
-    if (!chant) return '';
-    // 「が」を含む(=答えが1桁)場合は「が」までで切る
-    const gIdx = chant.indexOf('が');
-    if (gIdx >= 0) {
-      return chant.slice(0, gIdx + 1);
-    }
-    // 「が」を含まない(=答えが2桁)場合は a×b 部分のみ
-    if (AB_PREFIX_OVERRIDE[key]) return AB_PREFIX_OVERRIDE[key];
-    return AB_PREFIX[a] + AB_PREFIX[b];
+  // Spaced Repetition state
+  // mistakes: { kana: { wrongCount, correctSinceWrong, dueIn } }
+  // dueIn = number of questions until this kana should be re-asked
+  const STORAGE_KEY = 'hiragana_quiz_mistakes_v1';
+  const ROUND_KEY = 'hiragana_quiz_round_v1';
+  const STATS_KEY = 'hiragana_quiz_stats_v1';
+
+  // ===== ストレージ層 =====
+  // iPadOSのPWAではlocalStorageがアプリ終了時にクリアされる現象が
+  // 報告されているため、IndexedDBを主、localStorageをフォールバック
+  // として両方に書き込む。読み込み時はIndexedDB→localStorageの順で試す。
+  const DB_NAME = 'hiragana_quiz_db';
+  const DB_STORE = 'kv';
+  let dbPromise = null;
+
+  function openDB() {
+    if (dbPromise) return dbPromise;
+    dbPromise = new Promise((resolve) => {
+      try {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = () => {
+          const db = req.result;
+          if (!db.objectStoreNames.contains(DB_STORE)) {
+            db.createObjectStore(DB_STORE);
+          }
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => resolve(null);
+        req.onblocked = () => resolve(null);
+      } catch (e) {
+        resolve(null);
+      }
+    });
+    return dbPromise;
   }
 
-  const STORAGE_KEY = 'kuku_quiz_mistakes_v1';
-  const ROUND_KEY = 'kuku_quiz_round_v1';
-  const SETTINGS_KEY = 'kuku_quiz_settings_v1';
-  const SEEN_KEY = 'kuku_quiz_seen_v1';
+  async function dbGet(key) {
+    const db = await openDB();
+    if (!db) return null;
+    return new Promise((resolve) => {
+      try {
+        const tx = db.transaction(DB_STORE, 'readonly');
+        const store = tx.objectStore(DB_STORE);
+        const req = store.get(key);
+        req.onsuccess = () => resolve(req.result ?? null);
+        req.onerror = () => resolve(null);
+      } catch (e) { resolve(null); }
+    });
+  }
 
-  // ===== 状態 =====
-  let mistakes = {};       // 間隔反復: { "2x3": { wrongCount, correctSinceWrong, dueIn } }
-  let seen = {};           // 出題履歴: { "2x3": { asked, correct } } 全問題の累計
+  async function dbSet(key, value) {
+    const db = await openDB();
+    if (!db) return;
+    return new Promise((resolve) => {
+      try {
+        const tx = db.transaction(DB_STORE, 'readwrite');
+        const store = tx.objectStore(DB_STORE);
+        store.put(value, key);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => resolve();
+        tx.onabort = () => resolve();
+      } catch (e) { resolve(); }
+    });
+  }
+
+  // 同期版API: localStorageと同じインターフェースで使えるよう
+  // メモリキャッシュ + 非同期ミラーリングで実装する
+  const memCache = {};
+
+  // 起動時にIndexedDB→memCacheへロード
+  async function preloadStorage() {
+    for (const key of [STORAGE_KEY, ROUND_KEY, STATS_KEY]) {
+      let v = await dbGet(key);
+      // IndexedDBに無ければlocalStorageから読み出して移行
+      if (v === null || v === undefined) {
+        try {
+          const ls = localStorage.getItem(key);
+          if (ls !== null) {
+            v = ls;
+            // IndexedDBにも保存(移行)
+            await dbSet(key, v);
+          }
+        } catch (e) {}
+      }
+      if (v !== null && v !== undefined) {
+        memCache[key] = v;
+      }
+    }
+    // 永続化を要求(ブラウザにデータを消さないよう依頼)
+    if (navigator.storage && navigator.storage.persist) {
+      try { await navigator.storage.persist(); } catch (e) {}
+    }
+  }
+
+  function storageGet(key) {
+    if (memCache[key] !== undefined) return memCache[key];
+    try {
+      const v = localStorage.getItem(key);
+      if (v !== null) memCache[key] = v;
+      return v;
+    } catch (e) { return null; }
+  }
+
+  function storageSet(key, value) {
+    memCache[key] = value;
+    // localStorageには即座に書き込み(同期、軽量)
+    try { localStorage.setItem(key, value); } catch (e) {}
+    // IndexedDBにも書き込み(非同期だが Promiseを返すので待機可能)
+    return dbSet(key, value);
+  }
+
+  // アプリが背景に隠れる/閉じられる瞬間に強制的にデータを保存する
+  // iPadOSのPWAではこのタイミングがデータ消失のリスクポイント
+  function flushAllOnHide() {
+    // 全ての状態をlocalStorageへ確実に書き込み(同期)
+    try {
+      localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(mistakes));
+      localStorage.setItem(ROUND_KEY, JSON.stringify(roundQueue));
+    } catch (e) {}
+    // IndexedDBにも書き込み(非同期だが投げておく)
+    dbSet(STATS_KEY, JSON.stringify(stats));
+    dbSet(STORAGE_KEY, JSON.stringify(mistakes));
+    dbSet(ROUND_KEY, JSON.stringify(roundQueue));
+  }
+
+  // visibilitychange: アプリが背景に隠れた瞬間
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') flushAllOnHide();
+  });
+  // pagehide: ページが閉じられる/離脱する瞬間 (iOS Safari/PWAで信頼性高い)
+  window.addEventListener('pagehide', flushAllOnHide);
+  // beforeunload: 一部ブラウザで動く保険
+  window.addEventListener('beforeunload', flushAllOnHide);
+
+  let mistakes = {};
   let questionCount = 0;
-  let lastQuestionKey = null;
+  let lastTargetKana = null;
+  // roundQueue: array of kana characters remaining in this round
   let roundQueue = [];
-  let activeDans = [2, 5];  // 初期セット: 2と5の段
-  let score = 0;
-  let streak = 0;
-  let currentQ = null;     // { a, b, ans, key, isReview }
-  let canTap = true;
 
-  // ===== 永続化 =====
+  // 学習統計データ
+  // perKana: { 'あ': { attempts: N, correct: N }, ... }
+  // daily: { 'YYYY-MM-DD': { attempts: N, correct: N } }
+  // firstPlayDate: 初回プレイ日 (YYYY-MM-DD)
+  // lastPlayDate: 最後のプレイ日
+  let stats = {
+    perKana: {},
+    daily: {},
+    firstPlayDate: null,
+    lastPlayDate: null,
+    totalAttempts: 0,
+    totalCorrect: 0
+  };
+
+  function loadStats() {
+    try {
+      const raw = storageGet(STATS_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        stats = Object.assign(stats, parsed);
+      }
+    } catch (e) {}
+  }
+  function saveStats() {
+    try {
+      storageSet(STATS_KEY, JSON.stringify(stats));
+    } catch (e) {}
+  }
+
+  function todayStr() {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
+
+  function recordAttempt(kana, isCorrect) {
+    const today = todayStr();
+    if (!stats.firstPlayDate) stats.firstPlayDate = today;
+    stats.lastPlayDate = today;
+
+    if (!stats.perKana[kana]) stats.perKana[kana] = { attempts: 0, correct: 0 };
+    stats.perKana[kana].attempts += 1;
+    if (isCorrect) stats.perKana[kana].correct += 1;
+
+    if (!stats.daily[today]) stats.daily[today] = { attempts: 0, correct: 0 };
+    stats.daily[today].attempts += 1;
+    if (isCorrect) stats.daily[today].correct += 1;
+
+    stats.totalAttempts += 1;
+    if (isCorrect) stats.totalCorrect += 1;
+
+    saveStats();
+  }
+
+  // 頻度順(島村・三神 1994 等の幼児ひらがな獲得研究を参考に、
+  // 子どもの語彙でよく出会う文字を先に置いた順序)
+  // 同じ習得段階内では紛らわしい文字が連続しないよう配慮。
+  const FREQUENCY_ORDER = [
+    // 第1グループ: 自分の名前・身近な語に頻出
+    'あ', 'い', 'う', 'え', 'お',
+    'か', 'き', 'く', 'け', 'こ',
+    'さ', 'し', 'す', 'せ', 'そ',
+    'た', 'ち', 'つ', 'て', 'と',
+    'な', 'に', 'ぬ', 'ね', 'の',
+    'は', 'ひ', 'ふ', 'へ', 'ほ',
+    'ま', 'み', 'む', 'め', 'も',
+    'や', 'ゆ', 'よ',
+    'ら', 'り', 'る', 'れ', 'ろ',
+    'わ', 'を', 'ん'
+  ];
+
   function loadMistakes() {
-    try { const r = localStorage.getItem(STORAGE_KEY); if (r) mistakes = JSON.parse(r); }
-    catch (e) { mistakes = {}; }
+    try {
+      const raw = storageGet(STORAGE_KEY);
+      if (raw) mistakes = JSON.parse(raw);
+    } catch (e) { mistakes = {}; }
   }
   function saveMistakes() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(mistakes)); } catch (e) {}
+    try {
+      storageSet(STORAGE_KEY, JSON.stringify(mistakes));
+    } catch (e) {}
   }
-  function loadSeen() {
-    try { const r = localStorage.getItem(SEEN_KEY); if (r) seen = JSON.parse(r); }
-    catch (e) { seen = {}; }
-  }
-  function saveSeen() {
-    try { localStorage.setItem(SEEN_KEY, JSON.stringify(seen)); } catch (e) {}
-  }
-  function recordSeen(key, isCorrect) {
-    if (!seen[key]) seen[key] = { asked: 0, correct: 0 };
-    seen[key].asked += 1;
-    if (isCorrect) seen[key].correct += 1;
-    saveSeen();
-  }
+
   function loadRound() {
     try {
-      const r = localStorage.getItem(ROUND_KEY);
-      if (r) { const a = JSON.parse(r); if (Array.isArray(a)) roundQueue = a; }
+      const raw = storageGet(ROUND_KEY);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) roundQueue = arr;
+      }
     } catch (e) { roundQueue = []; }
   }
   function saveRound() {
-    try { localStorage.setItem(ROUND_KEY, JSON.stringify(roundQueue)); } catch (e) {}
-  }
-  function loadSettings() {
     try {
-      const r = localStorage.getItem(SETTINGS_KEY);
-      if (r) {
-        const s = JSON.parse(r);
-        if (s && Array.isArray(s.activeDans) && s.activeDans.length > 0) {
-          activeDans = s.activeDans.filter(n => n >= 1 && n <= 9);
-        }
-      }
-    } catch (e) {}
-  }
-  function saveSettings() {
-    try {
-      localStorage.setItem(SETTINGS_KEY, JSON.stringify({ activeDans }));
+      storageSet(ROUND_KEY, JSON.stringify(roundQueue));
     } catch (e) {}
   }
 
-  // ===== 出題ロジック =====
-  // 1ラウンド = 選択中の段 × 1〜9 の全組み合わせをシャッフルしたキュー
-  // 4×3 と 3×4 を別問題として扱う(可換性を体感させる: 学術的にはこの方が早く習得)
+  // Build a fresh round: all 46 kana in frequency order,
+  // lightly shuffled within small windows so that confusable
+  // pairs don't always appear back-to-back, but the overall
+  // frequency progression is preserved.
   function buildNewRound() {
-    const queue = [];
-    activeDans.forEach(a => {
-      for (let b = 1; b <= 9; b++) {
-        queue.push({ a, b });
-      }
-    });
-    // ウィンドウ5でシャッフル(同じ段が連続しないように軽く混ぜる)
-    const win = 5;
-    for (let i = 0; i < queue.length; i += win) {
-      const slice = queue.slice(i, i + win);
-      for (let j = slice.length - 1; j > 0; j--) {
+    const ordered = FREQUENCY_ORDER.slice();
+    // Shuffle within sliding windows of 5 to add variety
+    const windowSize = 5;
+    for (let i = 0; i < ordered.length; i += windowSize) {
+      const window = ordered.slice(i, i + windowSize);
+      for (let j = window.length - 1; j > 0; j--) {
         const k = Math.floor(Math.random() * (j + 1));
-        [slice[j], slice[k]] = [slice[k], slice[j]];
+        [window[j], window[k]] = [window[k], window[j]];
       }
-      for (let j = 0; j < slice.length; j++) queue[i + j] = slice[j];
+      for (let j = 0; j < window.length; j++) {
+        ordered[i + j] = window[j];
+      }
     }
-    return queue;
+    return ordered;
   }
 
-  function keyOf(a, b) { return `${a}x${b}`; }
-
-  function recordWrong(key) {
-    if (!mistakes[key]) {
-      mistakes[key] = { wrongCount: 0, correctSinceWrong: 0, dueIn: 0 };
+  function recordWrong(kana) {
+    if (!mistakes[kana]) {
+      mistakes[kana] = { wrongCount: 0, correctSinceWrong: 0, dueIn: 0 };
     }
-    mistakes[key].wrongCount += 1;
-    mistakes[key].correctSinceWrong = 0;
-    mistakes[key].dueIn = 2 + Math.floor(Math.random() * 2); // 2〜3問後
+    mistakes[kana].wrongCount += 1;
+    mistakes[kana].correctSinceWrong = 0;
+    // Re-ask soon: 2-3 questions later
+    mistakes[kana].dueIn = 2 + Math.floor(Math.random() * 2);
     saveMistakes();
   }
 
-  function recordCorrect(key) {
-    if (!mistakes[key]) return;
-    mistakes[key].correctSinceWrong += 1;
-    const c = mistakes[key].correctSinceWrong;
-    if (c === 1) mistakes[key].dueIn = 5;
-    else if (c === 2) mistakes[key].dueIn = 10;
-    else if (c >= 3) {
-      // 卒業
-      delete mistakes[key];
+  function recordCorrect(kana) {
+    if (!mistakes[kana]) return;
+    mistakes[kana].correctSinceWrong += 1;
+    // Spaced intervals: 2, 5, 10 questions, then graduate
+    const correctCount = mistakes[kana].correctSinceWrong;
+    if (correctCount === 1) mistakes[kana].dueIn = 5;
+    else if (correctCount === 2) mistakes[kana].dueIn = 10;
+    else if (correctCount >= 3) {
+      // Graduated! Remove from review queue
+      delete mistakes[kana];
     }
     saveMistakes();
   }
 
   function tickDueCounters() {
+    // After each question advances, decrement all dueIn counters
     Object.keys(mistakes).forEach(k => {
       if (mistakes[k].dueIn > 0) mistakes[k].dueIn -= 1;
     });
   }
 
-  function getDueKeys() {
+  function getDueKana() {
     return Object.keys(mistakes).filter(k => mistakes[k].dueIn <= 0);
   }
 
-  function pickNextQuestion() {
-    const due = getDueKeys();
+  function pickNextKana() {
+    const due = getDueKana();
+    let target;
 
-    // 復習割り込み: 40%の確率
+    // 復習対象がある場合は40%の確率で割り込み出題
+    // (まんべんなさを優先するためメイン進行は維持)
     if (due.length > 0 && Math.random() < 0.4) {
-      const candidates = due.filter(k => k !== lastQuestionKey);
+      const candidates = due.filter(k => k !== lastTargetKana);
       const pool = candidates.length > 0 ? candidates : due;
-      const k = pool[Math.floor(Math.random() * pool.length)];
-      const [a, b] = k.split('x').map(Number);
-      return { a, b, ans: a * b, key: k, isReview: true };
+      const c = pool[Math.floor(Math.random() * pool.length)];
+      target = KANA.find(k => k.c === c);
+      target._isReview = true;
+      return target;
     }
 
-    // 通常: ラウンドキューから
+    // ラウンドキューから次の文字を取得
+    // キューが空 or 残り1個で前回と同じ場合は新ラウンド開始
     if (roundQueue.length === 0) {
       roundQueue = buildNewRound();
     }
-    if (roundQueue.length === 1) {
-      const only = roundQueue[0];
-      if (keyOf(only.a, only.b) === lastQuestionKey) {
-        const remaining = roundQueue[0];
-        roundQueue = buildNewRound();
-        // 同じ問題を後ろに回す
-        const idx = roundQueue.findIndex(q => q.a === remaining.a && q.b === remaining.b);
-        if (idx >= 0) {
-          roundQueue.splice(idx, 1);
-          roundQueue.push(remaining);
-        }
-      }
-    }
-    // 先頭が前回と同じなら入れ替え
-    if (roundQueue.length > 1) {
-      const head = roundQueue[0];
-      if (keyOf(head.a, head.b) === lastQuestionKey) {
-        [roundQueue[0], roundQueue[1]] = [roundQueue[1], roundQueue[0]];
+    if (roundQueue.length === 1 && roundQueue[0] === lastTargetKana) {
+      // 同じ文字を連続で出さないため、新ラウンドを生成して先頭から取り出す
+      const remaining = roundQueue[0];
+      roundQueue = buildNewRound();
+      // remaining(=前回と同じ)はキュー後方に回す
+      const idx = roundQueue.indexOf(remaining);
+      if (idx >= 0) {
+        roundQueue.splice(idx, 1);
+        roundQueue.push(remaining);
       }
     }
 
-    const q = roundQueue.shift();
+    // 先頭が前回と同じなら一つ後ろの候補と入れ替える
+    if (roundQueue[0] === lastTargetKana && roundQueue.length > 1) {
+      [roundQueue[0], roundQueue[1]] = [roundQueue[1], roundQueue[0]];
+    }
+
+    const c = roundQueue.shift();
     saveRound();
-    return { a: q.a, b: q.b, ans: q.a * q.b, key: keyOf(q.a, q.b), isReview: false };
+    target = KANA.find(k => k.c === c);
+    target._isReview = false;
+    return target;
   }
 
-  // ===== 誤答(ディストラクター)生成 =====
-  // 学術知見: 「近接誤答」(±段の値、±1) と 「他の段の答え」を混ぜると
-  // 丸暗記でなく計算で確認する習慣がつく
-  function pickDistractors(correctAns, a, b, n) {
-    const candidates = new Set();
-
-    // 近接誤答1: ±a, ±b (1段ずらし)
-    [a, b, a + b, a - b].forEach(d => {
-      if (d > 0) {
-        const v1 = correctAns + d, v2 = correctAns - d;
-        if (v1 !== correctAns && v1 > 0 && v1 <= 100) candidates.add(v1);
-        if (v2 !== correctAns && v2 > 0 && v2 <= 100) candidates.add(v2);
-      }
-    });
-
-    // 近接誤答2: ±1, ±2
-    [1, 2, 3].forEach(d => {
-      const v1 = correctAns + d, v2 = correctAns - d;
-      if (v1 !== correctAns && v1 > 0 && v1 <= 100) candidates.add(v1);
-      if (v2 !== correctAns && v2 > 0 && v2 <= 100) candidates.add(v2);
-    });
-
-    // 他の段の答え(1〜9 × 1〜9 の中から)
-    const sameDan = [];
-    for (let i = 1; i <= 9; i++) {
-      const v = a * i;
-      if (v !== correctAns && v > 0) sameDan.push(v);
-      const v2 = b * i;
-      if (v2 !== correctAns && v2 > 0) sameDan.push(v2);
-    }
-
-    const candArr = Array.from(candidates);
-    shuffle(candArr);
-    shuffle(sameDan);
-
-    // 60% を近接誤答、40% を同段他項にして混ぜる
-    const result = new Set();
-    const nearCount = Math.ceil(n * 0.6);
-
-    for (const v of candArr) {
-      if (result.size >= nearCount) break;
-      if (v !== correctAns) result.add(v);
-    }
-    for (const v of sameDan) {
-      if (result.size >= n) break;
-      if (v !== correctAns) result.add(v);
-    }
-    // それでも足りない場合は適当な近い数字を埋める
-    let pad = 1;
-    while (result.size < n) {
-      const v = correctAns + pad;
-      if (v > 0 && v !== correctAns) result.add(v);
-      pad = pad > 0 ? -pad : -pad + 1;
-      if (Math.abs(pad) > 50) break;
-    }
-    return Array.from(result).slice(0, n);
+  function updateReviewBadge() {
+    const count = Object.keys(mistakes).length;
+    const badge = document.getElementById('reviewBadge');
+    document.getElementById('reviewCount').textContent = count;
+    badge.classList.toggle('show', count > 0);
   }
 
-  function shuffle(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
+  // ----- DOM & speech -----
+  let score = 0;
+  let streak = 0;
+  let currentTarget = null;
+  let canTap = true;
 
-  // ===== DOM =====
   const scoreNum = document.getElementById('scoreNum');
   const streakEl = document.getElementById('streak');
-  const num1El = document.getElementById('num1');
-  const num2El = document.getElementById('num2');
-  const equationEl = document.getElementById('equation');
+  const hintEmoji = document.getElementById('hintEmoji');
   const choicesEl = document.getElementById('choices');
   const speakBtn = document.getElementById('speakBtn');
   const restartBtn = document.getElementById('restartBtn');
-  const settingsBtn = document.getElementById('settingsBtn');
   const praise = document.getElementById('praise');
   const celebrate = document.getElementById('celebrate');
   const questionCard = document.getElementById('questionCard');
   const reviewTag = document.getElementById('reviewTag');
-  const danTag = document.getElementById('danTag');
-  const reviewBadge = document.getElementById('reviewBadge');
-  const reviewCountEl = document.getElementById('reviewCount');
-  const settingsModal = document.getElementById('settingsModal');
-  const closeSettingsBtn = document.getElementById('closeSettingsBtn');
-  const resetProgressBtn = document.getElementById('resetProgressBtn');
-  const danGrid = document.getElementById('danGrid');
-  const progressBtn = document.getElementById('progressBtn');
-  const progressModal = document.getElementById('progressModal');
-  const closeProgressBtn = document.getElementById('closeProgressBtn');
-  const matrixEl = document.getElementById('matrix');
-  const progressSummaryEl = document.getElementById('progressSummary');
-  const progressBarFill = document.getElementById('progressBarFill');
-  const progressBarText = document.getElementById('progressBarText');
 
-  // 暗記モード関連
-  const viewQuiz = document.getElementById('viewQuiz');
-  const viewMemorizePick = document.getElementById('viewMemorizePick');
-  const viewMemorizeCard = document.getElementById('viewMemorizeCard');
-  const modeTabs = document.querySelectorAll('.mode-tab');
-  const memoDanGrid = document.getElementById('memoDanGrid');
-  const memoCard = document.getElementById('memoCard');
-  const memoProgress = document.getElementById('memoProgress');
-  const memoNum1 = document.getElementById('memoNum1');
-  const memoNum2 = document.getElementById('memoNum2');
-  const memoAnswer = document.getElementById('memoAnswer');
-  const memoChant = document.getElementById('memoChant');
-  const memoSpeakBtn = document.getElementById('memoSpeakBtn');
-  const memoBackBtn = document.getElementById('memoBackBtn');
-  const memoNextBtn = document.getElementById('memoNextBtn');
-  const memoQuitBtn = document.getElementById('memoQuitBtn');
-
-  // ===== 音声 =====
+  // Cache best Japanese voice
   let jaVoice = null;
   function pickVoice() {
     const voices = speechSynthesis.getVoices();
+    // Prefer Kyoko, Otoya, or any ja-JP
     jaVoice = voices.find(v => /Kyoko/i.test(v.name)) ||
               voices.find(v => /Otoya/i.test(v.name)) ||
               voices.find(v => v.lang === 'ja-JP') ||
@@ -1390,15 +1174,11 @@
     return u;
   }
 
-  // 出題: 伝統的な唱えから「答えを伏せた部分」だけ読み上げる
-  // 例: 2x4 → 「ににんが」(「し」を読まない)
-  //     2x6 → 「にろく」(「じゅうに」を読まない)
-  function speakQuestion(q) {
-    if (!q || !('speechSynthesis' in window)) return;
+  // Speak the question: "ありの、あ"
+  function speakQuestion(kana) {
+    if (!('speechSynthesis' in window)) return;
     speechSynthesis.cancel();
-    const prompt = buildPrompt(q.a, q.b);
-    if (!prompt) return;
-    const u = speakUtterance(prompt, { rate: 0.85 });
+    const u = speakUtterance(`${kana.w}の、${kana.c}`, { rate: 0.85 });
     if (u) speechSynthesis.speak(u);
   }
 
@@ -1409,26 +1189,43 @@
     if (u) speechSynthesis.speak(u);
   }
 
-  // ===== レンダリング =====
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function pickDistractors(target, n) {
+    const tricky = new Set();
+    CONFUSION_GROUPS.forEach(g => {
+      if (g.includes(target.c)) {
+        g.forEach(k => { if (k !== target.c) tricky.add(k); });
+      }
+    });
+    const trickyKana = KANA.filter(k => tricky.has(k.c));
+    const otherKana = KANA.filter(k => !tricky.has(k.c) && k.c !== target.c);
+    shuffle(trickyKana);
+    shuffle(otherKana);
+    const trickyTake = Math.min(trickyKana.length, Math.max(2, Math.floor(n * 0.6)));
+    const result = trickyKana.slice(0, trickyTake);
+    while (result.length < n) {
+      result.push(otherKana.pop());
+    }
+    return result;
+  }
+
   function newQuestion() {
     canTap = true;
-    currentQ = pickNextQuestion();
-    lastQuestionKey = currentQ.key;
+    currentTarget = pickNextKana();
+    lastTargetKana = currentTarget.c;
     questionCount += 1;
 
-    // 数字をアニメーション表示
-    num1El.textContent = currentQ.a;
-    num2El.textContent = currentQ.b;
-    // re-trigger animation
-    num1El.style.animation = 'none';
-    num2El.style.animation = 'none';
-    void num1El.offsetWidth;
-    num1El.style.animation = 'numPop 0.4s ease';
-    num2El.style.animation = 'numPop 0.4s ease 0.1s';
+    hintEmoji.textContent = currentTarget.e;
 
-    danTag.textContent = `${currentQ.a}のだん`;
-
-    if (currentQ.isReview) {
+    // Show review styling if from review queue
+    if (currentTarget._isReview) {
       questionCard.classList.add('review-mode');
       reviewTag.classList.add('show');
     } else {
@@ -1436,40 +1233,42 @@
       reviewTag.classList.remove('show');
     }
 
-    const distractors = pickDistractors(currentQ.ans, currentQ.a, currentQ.b, 5);
-    const all = shuffle([currentQ.ans, ...distractors]);
+    const distractors = pickDistractors(currentTarget, 5);
+    const all = shuffle([currentTarget, ...distractors]);
 
     choicesEl.innerHTML = '';
-    all.forEach(v => {
+    all.forEach(k => {
       const btn = document.createElement('button');
       btn.className = 'choice';
-      btn.textContent = v;
-      btn.dataset.value = v;
-      btn.addEventListener('click', () => handleChoice(btn, v));
+      btn.textContent = k.c;
+      btn.dataset.kana = k.c;
+      btn.addEventListener('click', () => handleChoice(btn, k));
       choicesEl.appendChild(btn);
     });
 
-    setTimeout(() => speakQuestion(currentQ), 300);
+    setTimeout(() => speakQuestion(currentTarget), 250);
     updateReviewBadge();
   }
 
-  function handleChoice(btn, val) {
+  function handleChoice(btn, kana) {
     if (!canTap) return;
 
-    if (val === currentQ.ans) {
+    if (kana.c === currentTarget.c) {
       canTap = false;
       btn.classList.add('correct');
       score += 1;
       streak += 1;
       scoreNum.textContent = score;
       updateStreak();
-      recordCorrect(currentQ.key);
-      recordSeen(currentQ.key, true);
+      recordCorrect(currentTarget.c);
+      recordAttempt(currentTarget.c, true);
       tickDueCounters();
-
-      // 正解時は音声なし(アニメーションと紙吹雪のみ)
+      // Speak the tapped (correct) kana, then praise
       speechSynthesis.cancel();
-
+      const uKana = speakUtterance(kana.c, { rate: 0.8 });
+      const uPraise = speakUtterance('せいかい！', { rate: 0.9 });
+      if (uKana) speechSynthesis.speak(uKana);
+      if (uPraise) speechSynthesis.speak(uPraise);
       showPraise();
 
       if (streak >= 3) {
@@ -1478,17 +1277,21 @@
         updateStreak();
       }
 
-      setTimeout(newQuestion, 1800);
+      setTimeout(newQuestion, 1500);
     } else {
       btn.classList.add('wrong');
       streak = 0;
       updateStreak();
-      recordWrong(currentQ.key);
-      recordSeen(currentQ.key, false);
-
-      // 不正解時は音声なし(シェイクアニメーションのみ)
+      recordWrong(currentTarget.c);
+      recordAttempt(currentTarget.c, false);
+      // Speak the tapped (wrong) kana first, then teach the correct answer
       speechSynthesis.cancel();
-
+      const uTapped = speakUtterance(kana.c, { rate: 0.8 });
+      const uPause = speakUtterance('、、', { rate: 0.6 });
+      const uAnswer = speakUtterance(`${currentTarget.w}の、${currentTarget.c}`, { rate: 0.8 });
+      if (uTapped) speechSynthesis.speak(uTapped);
+      if (uPause) speechSynthesis.speak(uPause);
+      if (uAnswer) speechSynthesis.speak(uAnswer);
       setTimeout(() => btn.classList.remove('wrong'), 500);
       updateReviewBadge();
     }
@@ -1500,13 +1303,7 @@
     });
   }
 
-  function updateReviewBadge() {
-    const count = Object.keys(mistakes).length;
-    reviewCountEl.textContent = count;
-    reviewBadge.classList.toggle('show', count > 0);
-  }
-
-  const PRAISES = ['すごい！', 'やったー！', 'せいかい！', 'てんさい！', 'はなまる！', 'おみごと！'];
+  const PRAISES = ['すごい！', 'やったー！', 'せいかい！', 'てんさい！', 'はなまる！'];
   function showPraise() {
     praise.textContent = PRAISES[Math.floor(Math.random() * PRAISES.length)];
     praise.classList.remove('show');
@@ -1531,345 +1328,245 @@
     setTimeout(() => celebrate.classList.remove('show'), 3000);
   }
 
-  // ===== 進捗マトリクス =====
-  // 各問題のレベル(0〜4)を判定
-  //   0: 未出題
-  //   1: 不正解あり(まだ正解で挽回していない)
-  //   2: 不正解後 1回正解
-  //   3: 不正解後 2回正解
-  //   4: 卒業(=ノーミス または 不正解後3回連続正解)
-  function getLevel(key) {
-    const m = mistakes[key];
-    const s = seen[key];
-    if (m) {
-      // 復習中
-      const c = m.correctSinceWrong || 0;
-      if (c === 0) return 1;
-      if (c === 1) return 2;
-      if (c >= 2) return 3;
-    }
-    // mistakes に無い
-    if (!s || s.asked === 0) return 0; // 未出題
-    return 4; // 出題済みでミスなし(or 卒業済み)
-  }
-
-  function renderMatrix() {
-    matrixEl.innerHTML = '';
-    // ヘッダ行: × 1 2 3 ... 9
-    const thead = document.createElement('thead');
-    const headTr = document.createElement('tr');
-    const corner = document.createElement('th');
-    corner.className = 'corner';
-    corner.textContent = '×';
-    headTr.appendChild(corner);
-    for (let b = 1; b <= 9; b++) {
-      const th = document.createElement('th');
-      th.className = 'col-header';
-      th.textContent = b;
-      headTr.appendChild(th);
-    }
-    thead.appendChild(headTr);
-    matrixEl.appendChild(thead);
-
-    const tbody = document.createElement('tbody');
-    let counts = { 0:0, 1:0, 2:0, 3:0, 4:0 };
-    for (let a = 1; a <= 9; a++) {
-      const tr = document.createElement('tr');
-      const rowH = document.createElement('th');
-      rowH.className = 'row-header';
-      rowH.textContent = a;
-      tr.appendChild(rowH);
-      for (let b = 1; b <= 9; b++) {
-        const key = `${a}x${b}`;
-        const lv = getLevel(key);
-        counts[lv] += 1;
-        const td = document.createElement('td');
-        td.className = `lv${lv}`;
-        td.textContent = a * b;
-        tr.appendChild(td);
-      }
-      tbody.appendChild(tr);
-    }
-    matrixEl.appendChild(tbody);
-
-    // サマリー
-    const total = 81;
-    const graduated = counts[4];
-    progressBarFill.style.width = `${(graduated / total) * 100}%`;
-    progressBarText.textContent = `そつぎょう ${graduated} / ${total}`;
-
-    if (graduated === 0 && counts[0] === total) {
-      progressSummaryEl.textContent = 'まだ はじめたばかりだよ！';
-    } else if (graduated === total) {
-      progressSummaryEl.textContent = 'ぜんぶ そつぎょう！';
-    } else {
-      const inProgress = counts[1] + counts[2] + counts[3];
-      progressSummaryEl.textContent = `がんばってる: ${inProgress}・まだ: ${counts[0]}`;
-    }
-  }
-
-  progressBtn.addEventListener('click', () => {
-    renderMatrix();
-    progressModal.classList.add('show');
-  });
-  closeProgressBtn.addEventListener('click', () => {
-    progressModal.classList.remove('show');
-  });
-  progressModal.addEventListener('click', (e) => {
-    if (e.target === progressModal) {
-      progressModal.classList.remove('show');
-    }
-  });
-
-  const resetAllProgressBtn = document.getElementById('resetAllProgressBtn');
-  resetAllProgressBtn.addEventListener('click', () => {
-    if (!confirm('しんちょくを すべて リセットしますか？\n（てんすう・にがて・そつぎょう ぜんぶ さいしょから）')) return;
-    mistakes = {};
-    seen = {};
-    score = 0;
-    streak = 0;
-    saveMistakes();
-    saveSeen();
-    scoreNum.textContent = 0;
-    updateStreak();
-    updateReviewBadge();
-    renderMatrix();
-  });
-
-
-  // ===== 設定モーダル =====
-  function buildDanGrid() {
-    danGrid.innerHTML = '';
-    for (let i = 1; i <= 9; i++) {
-      const b = document.createElement('button');
-      b.className = 'dan-btn';
-      b.textContent = `${i}のだん`;
-      b.dataset.dan = i;
-      if (activeDans.includes(i)) b.classList.add('active');
-      b.addEventListener('click', () => {
-        const d = Number(b.dataset.dan);
-        if (activeDans.includes(d)) {
-          // 最低1つは残す
-          if (activeDans.length > 1) {
-            activeDans = activeDans.filter(x => x !== d);
-            b.classList.remove('active');
-          }
-        } else {
-          activeDans.push(d);
-          activeDans.sort((x, y) => x - y);
-          b.classList.add('active');
-        }
-      });
-      danGrid.appendChild(b);
-    }
-  }
-
-  function applyPreset(preset) {
-    switch (preset) {
-      case 'easy': activeDans = [2, 5]; break;
-      case 'lower': activeDans = [2, 3, 4, 5]; break;
-      case 'upper': activeDans = [6, 7, 8, 9]; break;
-      case 'all': activeDans = [1,2,3,4,5,6,7,8,9]; break;
-    }
-    buildDanGrid();
-  }
-
-  document.querySelectorAll('.preset-btn').forEach(btn => {
-    btn.addEventListener('click', () => applyPreset(btn.dataset.preset));
-  });
-
-  settingsBtn.addEventListener('click', () => {
-    buildDanGrid();
-    settingsModal.classList.add('show');
-  });
-
-  closeSettingsBtn.addEventListener('click', () => {
-    saveSettings();
-    settingsModal.classList.remove('show');
-    // 設定変更したらラウンドをリセット(新しい段で再構成)
-    roundQueue = buildNewRound();
-    saveRound();
-    newQuestion();
-  });
-
-  resetProgressBtn.addEventListener('click', () => {
-    if (!confirm('「にがてリスト」を リセットしますか？\n（てんすうは そのままです）')) return;
-    mistakes = {};
-    saveMistakes();
-    updateReviewBadge();
-  });
-
-  settingsModal.addEventListener('click', (e) => {
-    if (e.target === settingsModal) {
-      saveSettings();
-      settingsModal.classList.remove('show');
-    }
-  });
-
-  // ===== 各種ボタン =====
-  speakBtn.addEventListener('click', () => speakQuestion(currentQ));
-
+  speakBtn.addEventListener('click', () => speakQuestion(currentTarget));
   restartBtn.addEventListener('click', () => {
-    if (!confirm('さいしょから はじめますか？\n（てんすう だけ リセットされます。にがてな しきは のこります）')) return;
+    if (!confirm('さいしょから はじめますか？\n（てんすう だけ リセットされます。にがてな もじは のこります）')) return;
     score = 0;
     streak = 0;
     scoreNum.textContent = 0;
     updateStreak();
     newQuestion();
+  });
+
+  // ===== 成長レポート =====
+  const statsBtn = document.getElementById('statsBtn');
+  const statsScreen = document.getElementById('statsScreen');
+  const statsCloseBtn = document.getElementById('statsCloseBtn');
+  const resetStatsBtn = document.getElementById('resetStatsBtn');
+
+  // 50音表配置 (10列 × 5行) — 空セルはnull
+  const GOJUON_GRID = [
+    ['あ', 'か', 'さ', 'た', 'な', 'は', 'ま', 'や', 'ら', 'わ'],
+    ['い', 'き', 'し', 'ち', 'に', 'ひ', 'み', null, 'り', null],
+    ['う', 'く', 'す', 'つ', 'ぬ', 'ふ', 'む', 'ゆ', 'る', null],
+    ['え', 'け', 'せ', 'て', 'ね', 'へ', 'め', null, 'れ', null],
+    ['お', 'こ', 'そ', 'と', 'の', 'ほ', 'も', 'よ', 'ろ', 'を']
+  ];
+  // ん は最終列に1つだけ — 表外として最後に追加表示
+  // (50音表の伝統的配置に従い、わ・を・ん は別扱い)
+
+  function getMasteryClass(kana) {
+    const data = stats.perKana[kana];
+    if (!data || data.attempts === 0) return 'unseen';
+    const rate = data.correct / data.attempts;
+    if (data.attempts < 3) return 'learning-low';
+    if (rate < 0.5) return 'learning-low';
+    if (rate < 0.7) return 'learning-mid';
+    if (rate < 0.9 || data.attempts < 5) return 'learning-high';
+    return 'mastered';
+  }
+
+  function renderGojuon() {
+    const tbl = document.getElementById('gojuonTable');
+    tbl.innerHTML = '';
+    // 5行 × 10列 を行ごとに描画
+    for (let row = 0; row < 5; row++) {
+      for (let col = 0; col < 10; col++) {
+        const k = GOJUON_GRID[row][col];
+        const cell = document.createElement('div');
+        if (k === null) {
+          cell.className = 'kana-cell empty';
+        } else {
+          cell.className = 'kana-cell ' + getMasteryClass(k);
+          cell.textContent = k;
+        }
+        tbl.appendChild(cell);
+      }
+    }
+    // ん を最後に1セル分追加 (表外)
+    // 簡略化: 「ん」を10列目の追加行として表示しない場合、別のスタイルで
+    const nCell = document.createElement('div');
+    nCell.className = 'kana-cell ' + getMasteryClass('ん');
+    nCell.textContent = 'ん';
+    nCell.style.gridColumn = '10';
+    tbl.appendChild(nCell);
+  }
+
+  function renderSummary() {
+    const grid = document.getElementById('summaryGrid');
+    const masteredCount = KANA.filter(k => getMasteryClass(k.c) === 'mastered').length;
+    const totalKana = KANA.length;
+    const accuracy = stats.totalAttempts > 0
+      ? Math.round((stats.totalCorrect / stats.totalAttempts) * 100)
+      : 0;
+    const studyDays = Object.keys(stats.daily).length;
+    const masteredPct = Math.round((masteredCount / totalKana) * 100);
+
+    grid.innerHTML = `
+      <div class="summary-card wide">
+        <div class="summary-label">たっせい した もじ</div>
+        <div class="summary-value">${masteredCount} / ${totalKana}</div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: ${masteredPct}%"></div>
+          <div class="progress-text">${masteredPct}%</div>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">こたえた かず</div>
+        <div class="summary-value">${stats.totalAttempts}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">せいかいりつ</div>
+        <div class="summary-value">${accuracy}%</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">あそんだ ひ</div>
+        <div class="summary-value">${studyDays} にち</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">ふくしゅうちゅう</div>
+        <div class="summary-value">${Object.keys(mistakes).length} もじ</div>
+      </div>
+    `;
+  }
+
+  function renderWeakList() {
+    const container = document.getElementById('weakList');
+    // 5回以上挑戦した文字のうち、正解率が低いTOP3
+    const candidates = Object.keys(stats.perKana)
+      .filter(k => stats.perKana[k].attempts >= 3)
+      .map(k => ({
+        kana: k,
+        attempts: stats.perKana[k].attempts,
+        correct: stats.perKana[k].correct,
+        rate: stats.perKana[k].correct / stats.perKana[k].attempts
+      }))
+      .filter(x => x.rate < 0.9)
+      .sort((a, b) => a.rate - b.rate)
+      .slice(0, 3);
+
+    if (candidates.length === 0) {
+      container.innerHTML = '<div class="empty-msg">いまのところ にがてな もじは ないよ！すごい！</div>';
+      return;
+    }
+
+    container.innerHTML = '<div class="weak-list">' +
+      candidates.map(x => {
+        const k = KANA.find(kk => kk.c === x.kana);
+        const pct = Math.round(x.rate * 100);
+        return `
+          <div class="weak-item">
+            <div class="weak-kana">${x.kana}</div>
+            <div class="weak-info">
+              ${k ? k.e + ' ' + k.w : ''}<br>
+              ${x.correct} / ${x.attempts} かい せいかい
+            </div>
+            <div class="weak-rate">${pct}%</div>
+          </div>
+        `;
+      }).join('') + '</div>';
+  }
+
+  function renderDailyChart() {
+    const container = document.getElementById('dailyChartArea');
+    // 直近14日分を表示
+    const days = 14;
+    const today = new Date();
+    const buckets = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      const key = `${y}-${m}-${day}`;
+      const entry = stats.daily[key] || { attempts: 0, correct: 0 };
+      buckets.push({
+        key,
+        label: `${parseInt(m)}/${parseInt(day)}`,
+        attempts: entry.attempts,
+        correct: entry.correct,
+        isToday: i === 0
+      });
+    }
+
+    const maxVal = Math.max(1, ...buckets.map(b => b.attempts));
+
+    if (buckets.every(b => b.attempts === 0)) {
+      container.innerHTML = '<div class="empty-msg">まだ きろくが ないよ。あそんでみよう！</div>';
+      return;
+    }
+
+    const bars = buckets.map(b => {
+      const heightPct = (b.attempts / maxVal) * 100;
+      const cls = b.isToday ? 'daily-bar today' : 'daily-bar';
+      const title = `${b.label}: ${b.correct}/${b.attempts}`;
+      return `<div class="${cls}" style="height: ${heightPct}%" title="${title}"></div>`;
+    }).join('');
+
+    // ラベルは奇数番目だけ表示して間引く
+    const labels = buckets.map((b, i) =>
+      `<span>${i % 3 === 0 || b.isToday ? b.label : ''}</span>`
+    ).join('');
+
+    container.innerHTML = `
+      <div class="daily-chart">${bars}</div>
+      <div class="daily-labels">${labels}</div>
+    `;
+  }
+
+  function showStats() {
+    renderSummary();
+    renderGojuon();
+    renderWeakList();
+    renderDailyChart();
+    statsScreen.classList.add('show');
+  }
+
+  function hideStats() {
+    statsScreen.classList.remove('show');
+  }
+
+  statsBtn.addEventListener('click', showStats);
+  statsCloseBtn.addEventListener('click', hideStats);
+  resetStatsBtn.addEventListener('click', () => {
+    if (!confirm('きろくを ぜんぶ けしますか？\n(おうちの ひとが かくにん してください)')) return;
+    stats = {
+      perKana: {},
+      daily: {},
+      firstPlayDate: null,
+      lastPlayDate: null,
+      totalAttempts: 0,
+      totalCorrect: 0
+    };
+    saveStats();
+    showStats();
   });
 
   document.addEventListener('dblclick', e => e.preventDefault());
 
-  // iOS Safari: 最初のタップで音声を有効化
   document.addEventListener('touchstart', function init() {
     speakSimple('');
     document.removeEventListener('touchstart', init);
   }, { once: true });
 
-  // ===== 暗記モード =====
-  let currentMode = 'quiz'; // 'quiz' or 'memorize'
-  let memoDan = null;       // 選択中の段(1〜9)
-  let memoIndex = 0;        // 現在表示中のインデックス(0〜8)
-
-  function switchMode(mode) {
-    currentMode = mode;
-    modeTabs.forEach(tab => {
-      tab.classList.toggle('active', tab.dataset.mode === mode);
-    });
-    // 進行中の音声をすべて止める
-    if ('speechSynthesis' in window) speechSynthesis.cancel();
-
-    if (mode === 'quiz') {
-      viewQuiz.style.display = '';
-      viewMemorizePick.style.display = 'none';
-      viewMemorizeCard.style.display = 'none';
-    } else {
-      viewQuiz.style.display = 'none';
-      viewMemorizePick.style.display = '';
-      viewMemorizeCard.style.display = 'none';
-      buildMemoDanGrid();
-    }
+  // Init - IndexedDBから先にプリロードしてからアプリを開始
+  async function bootstrap() {
+    await preloadStorage();
+    loadMistakes();
+    loadRound();
+    loadStats();
+    updateReviewBadge();
+    newQuestion();
   }
+  bootstrap();
 
-  modeTabs.forEach(tab => {
-    tab.addEventListener('click', () => switchMode(tab.dataset.mode));
-  });
-
-  function buildMemoDanGrid() {
-    memoDanGrid.innerHTML = '';
-    for (let i = 1; i <= 9; i++) {
-      const b = document.createElement('button');
-      b.className = 'memo-dan-btn';
-      b.textContent = `${i}のだん`;
-      b.addEventListener('click', () => startMemorize(i));
-      memoDanGrid.appendChild(b);
-    }
-  }
-
-  function startMemorize(dan) {
-    memoDan = dan;
-    memoIndex = 0;
-    viewMemorizePick.style.display = 'none';
-    viewMemorizeCard.style.display = '';
-    showMemoCard();
-  }
-
-  function showMemoCard() {
-    const a = memoDan;
-    const b = memoIndex + 1;
-    memoNum1.textContent = a;
-    memoNum2.textContent = b;
-    memoAnswer.textContent = a * b;
-    memoChant.textContent = KUKU_CHANT[`${a}x${b}`] || '';
-    memoProgress.textContent = `${b} / 9`;
-
-    // ボタンの状態
-    memoBackBtn.disabled = (memoIndex === 0);
-    memoNextBtn.textContent = (memoIndex === 8) ? 'おわり ✓' : 'つぎ →';
-
-    // アニメーションをリスタート
-    memoAnswer.style.animation = 'none';
-    memoChant.style.animation = 'none';
-    void memoAnswer.offsetWidth;
-    memoAnswer.style.animation = '';
-    memoChant.style.animation = '';
-
-    // 唱えを読み上げ(全文: 答え込み)
-    speakMemoChant(a, b);
-  }
-
-  function speakMemoChant(a, b) {
-    if (!('speechSynthesis' in window)) return;
-    speechSynthesis.cancel();
-    const chant = KUKU_CHANT[`${a}x${b}`];
-    if (!chant) return;
-    const u = speakUtterance(chant, { rate: 0.85 });
-    if (u) speechSynthesis.speak(u);
-  }
-
-  function memoNext() {
-    if (memoIndex >= 8) {
-      // 9まで終わった: 段選択に戻る
-      if ('speechSynthesis' in window) speechSynthesis.cancel();
-      bigCelebrate(); // ご褒美の紙吹雪
-      setTimeout(() => {
-        viewMemorizeCard.style.display = 'none';
-        viewMemorizePick.style.display = '';
-      }, 1200);
-      return;
-    }
-    memoIndex += 1;
-    showMemoCard();
-  }
-
-  function memoBack() {
-    if (memoIndex === 0) return;
-    memoIndex -= 1;
-    showMemoCard();
-  }
-
-  // カード自体のタップで「つぎへ」(子どもが押しやすいように)
-  memoCard.addEventListener('click', (e) => {
-    // スピーカーボタンへのクリックは伝播してくるので除外
-    if (e.target.closest('.speaker-btn')) return;
-    memoNext();
-  });
-  memoNextBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    memoNext();
-  });
-  memoBackBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    memoBack();
-  });
-  memoSpeakBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    speakMemoChant(memoDan, memoIndex + 1);
-  });
-  memoQuitBtn.addEventListener('click', () => {
-    if ('speechSynthesis' in window) speechSynthesis.cancel();
-    viewMemorizeCard.style.display = 'none';
-    viewMemorizePick.style.display = '';
-  });
-
-  // ===== 初期化 =====
-  loadSettings();
-  loadMistakes();
-  loadSeen();
-  loadRound();
-  // 保存されたラウンドが現在の段設定と整合しないなら作り直す
-  if (roundQueue.length === 0 ||
-      !roundQueue.every(q => activeDans.includes(q.a))) {
-    roundQueue = buildNewRound();
-    saveRound();
-  }
-  updateReviewBadge();
-  newQuestion();
-
-  // ===== Service Worker =====
+  // Service Worker 登録 (オフライン対応)
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
+      navigator.serviceWorker.register('sw.js').catch(() => {
+        // 登録失敗してもアプリは動作するので無視
+      });
     });
   }
 </script>
